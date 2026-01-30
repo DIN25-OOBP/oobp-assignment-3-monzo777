@@ -4,42 +4,73 @@
   for variables, function parameters, function return values and object structures. 
 */
 
-/*
-Task 1 - Food class
-Create a class called Food. The class should have the following properties:
-- name (string)
-- calories (number)
-The class should have the following methods:
-- getName(): string, returns the name of the food
-- getFoodInfo(): string, returns a string in the following format: "<name> has <calories> calories"
-*/
-/* Write your Task 1 solution here */
+/* Task 1 - Food class */
 
+class Food {
+  private name: string;
+  private calories: number;
 
+  constructor(name: string, calories: number) {
+    this.name = name;
+    this.calories = calories;
+  }
 
-/* Task 2 - Create a class Refrigerator. The purpose of the class is to store Food objects. 
-  The Refrigerator should be able to store an unlimited amount of Food objects.
-  The Refrigerator should offer capabilities to add Food objects to the refrigerator,
-  get the contents of the refrigerator and eat a Food object from the refrigerator.
-  The Refrigerator should also offer method to calculate the total calories of all the Food objects in the refrigerator.
+  public getName(): string {
+    return this.name;
+  }
 
-  The class should have the following methods:
-  - addFood(food: Food): void, adds a Food object to the refrigerator
-  - getContents(): string[], returns an array of strings containing the names of the Food objects in the refrigerator
-  - eatFood(foodName: string): string, finds Food object with foodName from the refrigerator, removes a Food object from the refrigerator and
-                         returns a string in the following format: "You ate <name> with <calories> calories". If 
-                         the Food object is not in the refrigerator, return a string in the following format:
-                         "There is no <name> in the refrigerator".
-  - getTotalCalories(): number, returns the total calories of all the Food objects in the refrigerator
-  - getNumberOfFoodItems(): number, returns the number of Food objects in the refrigerator
-  
+  public getCalories(): number {
+    return this.calories;
+  }
 
-  Note you can use an array method splice to remove an element from an array.
-  You can read more about the splice method here: 
-  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
-*/
-/* Write your Task 2 solution here */
+  public getFoodInfo(): string {
+    return `${this.name} has ${this.calories} calories`;
+  }
+}
 
+/* Task 2 - Refrigerator class */
 
+class Refrigerator {
+  // MUST be public and named "food" to satisfy tests
+  public food: Food[];
+
+  constructor() {
+    this.food = [];
+  }
+
+  public addFood(food: Food): void {
+    this.food.push(food);
+  }
+
+  public getContents(): string[] {
+    return this.food.map((item: Food) => item.getName());
+  }
+
+  public eatFood(foodName: string): string {
+    const index: number = this.food.findIndex(
+      (item: Food) => item.getName() === foodName
+    );
+
+    if (index === -1) {
+      return `There is no ${foodName} in the refrigerator`;
+    }
+
+    const eatenFoodArray: Food[] = this.food.splice(index, 1);
+    const eatenFood: Food = eatenFoodArray[0];
+
+    return `You ate ${eatenFood.getName()} with ${eatenFood.getCalories()} calories`;
+  }
+
+  public getTotalCalories(): number {
+    return this.food.reduce(
+      (total: number, item: Food) => total + item.getCalories(),
+      0
+    );
+  }
+
+  public getNumberOfFoodItems(): number {
+    return this.food.length;
+  }
+}
 
 export { Food, Refrigerator };
